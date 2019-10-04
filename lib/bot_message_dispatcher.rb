@@ -1,4 +1,3 @@
-
 class BotMessageDispatcher
   attr_reader :message, :user
 
@@ -8,6 +7,7 @@ class BotMessageDispatcher
   end
 
   def process
+    pp user.get_next_bot_command
     if user.get_next_bot_command
       bot_command = user.get_next_bot_command.safe_constantize.new(user, message)
 

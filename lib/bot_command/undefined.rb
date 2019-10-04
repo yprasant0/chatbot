@@ -5,4 +5,3 @@ module BotCommand
     end
   end
 end
-

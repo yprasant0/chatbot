@@ -7,7 +7,7 @@ module BotCommand
     def initialize(user, message)
       @user = user
       @message = message
-      token = Rails.application.secrets.bot_token
+      token = Rails.application.secrets.secret_key_base
       @api = ::Telegram::Bot::Api.new(token)
     end
 
@@ -22,10 +22,12 @@ module BotCommand
     protected
 
     def send_message(text, options={})
-      @api.call(‘sendMessage’, chat_id: @user.telegram_id, text: text)
+      @api.call('sendMessage', chat_id: @user.telegram_id, text: text)
     end
 
     def text
+      @message[:message][:text]
+      pp @message
       @message[:message][:text]
     end
 
