@@ -1,35 +1,35 @@
-class BotMessageDispatcher
-  attr_reader :message, :user
 
-  def initialize(message, user)
+class BotMessageDispatcher
+  attr_reader :message
+
+  def initialize(message)
     @message = message
-    @user = user
+
   end
 
   def process
-    pp user.get_next_bot_command
-    if user.get_next_bot_command
-      bot_command = user.get_next_bot_command.safe_constantize.new(user, message)
-
-      if bot_command.should_start?
-        bot_command.start
-      else
-        unknown_command
-      end
-    else
-      start_command = BotCommand::Start.new(user, message)
-
-      if start_command.should_start?
-        start_command.start
-      else
-        unknown_command
-      end
+    @texted = @message[:message][:text]
+    t= @texted
+    if t == "start"
+      BotCommand::Start.new(message).start
     end
+    if !@message.nil? && @texted.split.first.downcase == "name"
+
+      $k = @texted
+      BotCommand::Born.new(message).starto
+
+    end
+    if !@message.nil? && @texted.split.first.downcase == "in"
+      user=User.new
+      user.first_name = $k
+      user.save
+      user.recipe = @texted
+      user.save
+      pp @texted
+      pp $k
+      BotCommand::WriteBlog.new(message).kstart
+      end
+
   end
 
-  private
-
-  def unknown_command
-    BotCommand::Undefined.new(user, message).start
-  end
 end
